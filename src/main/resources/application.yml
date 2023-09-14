@@ -1,0 +1,20 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://root:example@localhost:27017/demo?authSource=admin
+
+  docker:
+    compose:
+      enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - prometheus
+
+key:
+  secret: password!
