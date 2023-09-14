@@ -1,8 +1,10 @@
-package com.shisanfan.shisanfanauthspring.user.infrastructure
+package com.example.demo.user.infrastructure
 
-import com.shisanfan.shisanfanauthspring.user.domain.User
+import com.example.demo.user.domain.User
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.ListPagingAndSortingRepository
+import org.springframework.data.repository.Repository
 
-interface IUserRepository : ListPagingAndSortingRepository<User, String>, CrudRepository<User, String>
+interface IUserRepository : ListPagingAndSortingRepository<User, String>, CrudRepository<User, String>,
+    Repository<User, String>
 

@@ -1,4 +1,4 @@
-package com.shisanfan.shisanfanauthspring.user.api
+package com.example.demo.user.api
 
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping

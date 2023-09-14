@@ -1,10 +1,10 @@
-package com.shisanfan.shisanfanauthspring
+package com.example.demo
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest
-class ShisanfanAuthSpringApplicationTests {
+@SpringBootTest()
+class DemoApplicationTests {
 
     @Test
     fun contextLoads() {

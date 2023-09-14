@@ -6,11 +6,13 @@ plugins {
     id("io.spring.dependency-management") version "1.1.3"
     // id("org.graalvm.buildtools.native") version "0.9.26"
     id("com.google.cloud.tools.jib") version "3.3.2"
+    id("com.google.devtools.ksp") version "1.9.10-1.0.13"
+    jacoco
     kotlin("jvm") version "1.9.10"
     kotlin("plugin.spring") version "1.9.10"
 }
 
-group = "com.shisanfan"
+group = "com.example"
 version = "1.0.0"
 
 java {
@@ -46,6 +48,12 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
+    // arrow
+    implementation("io.arrow-kt:arrow-core:1.2.0")
+    implementation("io.arrow-kt:arrow-fx-coroutines:1.2.0")
+    implementation("io.arrow-kt:arrow-optics:1.2.0")
+    ksp("io.arrow-kt:arrow-optics-ksp-plugin:1.2.0")
+
     // implementation("io.micrometer:micrometer-tracing-bridge-brave")
     // runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 
@@ -63,6 +71,15 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mongodb")
+
+    // pdf
+    implementation("org.apache.pdfbox:pdfbox:3.0.0")
+
+    // excel
+    implementation("org.apache.poi:poi:5.2.3")
+    implementation("org.apache.poi:poi-ooxml:5.2.3")
+
+
 }
 
 dependencyManagement {
