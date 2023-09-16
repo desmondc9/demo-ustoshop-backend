@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.time.Instant
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     id("org.springframework.boot") version "3.1.3"
     id("io.spring.dependency-management") version "1.1.3"
     // id("org.graalvm.buildtools.native") version "0.9.26"
-    id("com.google.cloud.tools.jib") version "3.3.2"
+    // id("com.google.cloud.tools.jib") version "3.3.2"
     id("com.google.devtools.ksp") version "1.9.10-1.0.13"
     jacoco
     kotlin("jvm") version "1.9.10"
@@ -16,7 +16,7 @@ group = "com.example"
 version = "1.0.0"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_20
 }
 
 configurations {
@@ -28,6 +28,9 @@ configurations {
 repositories {
     mavenCentral()
     gradlePluginPortal()
+    // maven {
+    //     url = uri("https://plugins.gradle.org/m2/")
+    // }
 }
 
 extra["springCloudVersion"] = "2022.0.4"
@@ -39,7 +42,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
-    // implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     // implementation("org.springframework.boot:spring-boot-starter-oauth2-authorization-server")
 
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -91,7 +94,7 @@ dependencyManagement {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs += "-Xjsr305=strict"
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = JavaVersion.VERSION_20.toString()
     }
 }
 
@@ -99,25 +102,8 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-jib {
-    from {
-        image = "eclipse-temurin:17-jre"
-        platforms {
-            // platform {
-            //     architecture = "amd64"
-            //     os = "linux"
-            // }
-            platform {
-                architecture = "arm64"
-                os = "linux"
-            }
-        }
-    }
-    to {
-        image = "shisanfan-auth-spring"
-        tags = setOf("latest", "${Instant.now().toEpochMilli()}")
-    }
-    container {
-        mainClass = "com.shisanfan.shisanfanauthspring.ShisanfanAuthSpringApplicationKt"
+tasks.getByName<BootJar>("bootJar") {
+    layered {
+        includeLayerTools = true
     }
 }
