@@ -18,6 +18,8 @@ spring:
     log-request-details: true
   codec:
     log-request-details: true
+  main:
+    banner-mode: off
 
 management:
   endpoints:
@@ -27,5 +29,4 @@ management:
           - health
           - info
           - prometheus
-
 
