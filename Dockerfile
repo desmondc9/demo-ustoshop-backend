@@ -1,7 +1,9 @@
 # Build stage
 FROM gradle:8-jdk20 AS build
-COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
+COPY --chown=gradle:gradle ./build.gradle.kts ./
+RUN gradle dependencies --refresh-dependencies --no-daemon
+COPY --chown=gradle:gradle . ./
 RUN gradle bootJar -x test --no-daemon
 
 # Extract layers stage
