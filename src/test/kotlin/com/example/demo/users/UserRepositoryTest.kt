@@ -1,8 +1,8 @@
-package com.example.demo.user
+package com.example.demo.users
 
 import com.example.demo.MongoDBTest
-import com.example.demo.user.domain.User
-import com.example.demo.user.infrastructure.IUserRepository
+import com.example.demo.users.models.User
+import com.example.demo.users.repositories.IUserRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.Test
@@ -16,7 +16,7 @@ class UserRepositoryTest(
     @Test
     fun `should save user into db`() {
         val u1 = User(
-            id = ObjectId().toHexString(),
+            id = ObjectId().toString(),
             name = "test",
             password = "test",
         )

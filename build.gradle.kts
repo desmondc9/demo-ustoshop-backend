@@ -28,9 +28,6 @@ configurations {
 repositories {
     mavenCentral()
     gradlePluginPortal()
-    // maven {
-    //     url = uri("https://plugins.gradle.org/m2/")
-    // }
 }
 
 extra["springCloudVersion"] = "2022.0.4"
@@ -81,8 +78,6 @@ dependencies {
     // excel
     implementation("org.apache.poi:poi:5.2.3")
     implementation("org.apache.poi:poi-ooxml:5.2.3")
-
-
 }
 
 dependencyManagement {

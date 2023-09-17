@@ -8,6 +8,7 @@ import org.testcontainers.utility.DockerImageName
 
 @Testcontainers
 abstract class MongoDBTest {
+
     companion object {
         @Container
         @ServiceConnection

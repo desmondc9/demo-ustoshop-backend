@@ -6,6 +6,8 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.common.PDRectangle
 import org.apache.pdfbox.pdmodel.font.PDType1Font
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName
+import org.apache.poi.ss.usermodel.Cell
+import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -20,10 +22,10 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 @RestController
 @RequestMapping("/example")
+@CrossOrigin(origins = ["*"])
 class ExampleController {
 
     @OptIn(ExperimentalEncodingApi::class)
-    @CrossOrigin(origins = ["*"])
     @PostMapping("/upload-file")
     fun uploadFile(@RequestBody request: FileUploadRequest) {
         val fileBytes = Base64.decode(request.file)
@@ -31,8 +33,8 @@ class ExampleController {
         val input = fileBytes.inputStream()
         WorkbookFactory.create(input).use { workbook ->
             val sheet = workbook.getSheetAt(0)
-            sheet.forEach { row ->
-                row.forEach { cell ->
+            sheet.forEach { row: Row ->
+                row.forEach { cell: Cell ->
                     val cellValue = cell.toString()
                     print("$cellValue\t")
                 }
@@ -41,7 +43,6 @@ class ExampleController {
     }
 
     @GetMapping("/download-file", produces = [MediaType.APPLICATION_PDF_VALUE])
-    @CrossOrigin(origins = ["*"])
     fun downloadFile(): ByteArray {
         ByteArrayOutputStream().use { out ->
             PDDocument().use {

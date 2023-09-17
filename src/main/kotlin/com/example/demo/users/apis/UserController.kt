@@ -1,4 +1,4 @@
-package com.example.demo.user.api
+package com.example.demo.users.apis
 
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
