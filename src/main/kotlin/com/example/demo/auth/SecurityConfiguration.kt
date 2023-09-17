@@ -54,7 +54,7 @@ class SecurityConfiguration(
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("127.0.0.1:5173") // or specify a list of allowed origins
+        configuration.allowedOrigins = listOf("127.0.0.1:5173", "localhost:5173") // or specify a list of allowed origins
         configuration.setAllowedMethods(
             listOf(
                 "GET",
