@@ -40,7 +40,7 @@ class DeliveryOrderControllerTest(
     inner class `Given a delivery channel` {
 
         @Test
-        fun `it should create a delivery channel with ADMIN authority`() {
+        fun `it should create a DeliveryChannel with ADMIN authority`() {
             val request = CreateDeliveryChannel(name = "UPS", defaultAddress = Random.nextString(20))
             val headers = HttpHeaders().also { it.setBasicAuth("admin", "pa\$sword!") }
             val httpEntity = HttpEntity(request, headers)
@@ -59,7 +59,7 @@ class DeliveryOrderControllerTest(
         }
 
         @Test
-        fun `it should not create a delivery channel without ADMIN authority`() {
+        fun `it should not create a DeliveryChannel without ADMIN authority`() {
             createUserInDatabase(username = "nonAdmin", password = "password", userReposiotry::save)
 
             val request = CreateDeliveryChannel(name = "UPS", defaultAddress = Random.nextString(20))
