@@ -13,8 +13,6 @@ import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Positive
 import org.springframework.dao.OptimisticLockingFailureException
-import org.springframework.data.annotation.Id
-import org.springframework.data.annotation.Version
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.Authentication
@@ -28,7 +26,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
@@ -41,7 +38,7 @@ class DeliveryOrderController(
     val deliveryOrderCommandHandler: DeliveryOrderCommandHandler,
     val deliveryOrderQueryHandler: DeliveryOrderQueryHandler,
 ) {
-    @PostMapping("/input-user-input-delivery-order-data")
+    @PostMapping("/import-raw-delivery-data")
     fun importRawDeliveryData(
         @Valid @RequestBody request: RawDeliveryDataRequest,
         authentication: Authentication,
@@ -145,7 +142,6 @@ class DeliveryOrderController(
 
 data class RawDeliveryDataRequest(
     @NotNull val billOfLadingNumber: String,
-    @NotNull val customerId: String,
     @Positive val totalWeight: Weight,
     @NotNull val totalNumberOfBoxes: Int,
     @NotEmpty val channelCompositions: List<ChannelComposition>,
