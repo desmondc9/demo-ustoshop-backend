@@ -1,1 +1,1 @@
-rootProject.name = "demo_backend"
+rootProject.name = "demo-ustoshop-backend"
