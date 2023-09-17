@@ -28,7 +28,12 @@ class PdfService {
                     content.setFont(PDType1Font(Standard14Fonts.FontName.HELVETICA), 12f)
 
                     content.newLineAtOffset(0f, -20f)
-                    content.showText(deliveryOrder.issuer)
+                    // content.showText(deliveryOrder.issuer)
+                    deliveryOrder.issuer.split("\n").forEach {
+                        content.showText(it)
+                        content.newLineAtOffset(0f, -15f)
+                    }
+
                     content.newLineAtOffset(300f, 0f)
                     content.showText(deliveryOrder.issuedDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")))
                     content.newLineAtOffset(100f, 0f)
