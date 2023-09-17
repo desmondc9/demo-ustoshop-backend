@@ -44,8 +44,8 @@ class SecurityConfiguration(
         .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
         .authorizeHttpRequests {
             it.requestMatchers(
-                "actuator/**",
-                "/api/login",
+                "/actuator/**",
+                "/login",
             ).permitAll()
                 .anyRequest().authenticated()
         }
