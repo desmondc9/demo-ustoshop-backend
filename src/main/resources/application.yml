@@ -9,7 +9,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://root:example@localhost:27017/demo?authSource=admin
+      uri: ${MONGODB_URI:mongodb://root:example@localhost:27017/demo?authSource=admin}
 
   docker:
     compose:
@@ -28,6 +28,4 @@ management:
           - info
           - prometheus
 
-key:
-  secret: password!
 
