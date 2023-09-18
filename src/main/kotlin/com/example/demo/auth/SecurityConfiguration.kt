@@ -59,6 +59,8 @@ class SecurityConfiguration(
             "http://localhost:5173",
             "http://localhost:8089",
             "http://127.0.0.1:8089",
+            "http://hammerhead-app-qtzd2.ondigitalocean.app",
+            "https://hammerhead-app-qtzd2.ondigitalocean.app",
         ) // or specify a list of allowed origins
         configuration.setAllowedMethods(
             listOf(
