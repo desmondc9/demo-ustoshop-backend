@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
+import java.nio.file.Files
 import java.time.format.DateTimeFormatter
 
 @Service
@@ -46,6 +47,11 @@ class DeliveryOrderQueryHandler(
             )
         }
         return DeliveryOrderList(lines)
+    }
+
+    fun downloadPdf(path: String): ByteArray {
+        val result = Files.readAllBytes(java.nio.file.Path.of(path))
+        return result
     }
 
     fun queryAllDeliveryChannels(): DeliveryChannelListView {
