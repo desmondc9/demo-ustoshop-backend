@@ -36,3 +36,7 @@ data class DeleteDeliveryChannel(
     val id: String,
 ) : IDeliveryOrderCommand
 
+data class DeleteDeliveryOrder(
+    val id: String,
+) : IDeliveryOrderCommand
+

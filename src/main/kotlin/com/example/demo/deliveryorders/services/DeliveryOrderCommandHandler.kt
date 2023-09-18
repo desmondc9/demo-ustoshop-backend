@@ -77,6 +77,10 @@ class DeliveryOrderCommandHandler(
         )
     }
 
+    fun handle(cmd: DeleteDeliveryOrder) {
+        deliveryOrderRepository.deleteById(cmd.id)
+    }
+
     private fun generatePickOrder(
         date: LocalDate,
         rawDeliveryData: RawDeliveryData,

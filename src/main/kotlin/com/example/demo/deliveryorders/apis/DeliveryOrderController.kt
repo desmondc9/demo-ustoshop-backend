@@ -6,6 +6,7 @@ import com.example.demo.deliveryorders.models.valueobjects.ChannelComposition
 import com.example.demo.deliveryorders.models.valueobjects.Weight
 import com.example.demo.deliveryorders.services.CreateDeliveryChannel
 import com.example.demo.deliveryorders.services.DeleteDeliveryChannel
+import com.example.demo.deliveryorders.services.DeleteDeliveryOrder
 import com.example.demo.deliveryorders.services.DeliveryOrderCommandHandler
 import com.example.demo.deliveryorders.services.DeliveryOrderList
 import com.example.demo.deliveryorders.services.DeliveryOrderQueryHandler
@@ -85,6 +86,23 @@ class DeliveryOrderController(
     } catch (e: Exception) {
         throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message)
     }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    fun deleteDeliveryOrder(
+        @PathVariable("id") id: String,
+    ) =
+        try {
+            val cmd = DeleteDeliveryOrder(id = id)
+            val result = deliveryOrderCommandHandler.handle(cmd)
+            result
+        } catch (e: Exception) {
+            when (e) {
+                is MethodArgumentNotValidException -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
+                else -> throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message)
+            }
+        }
+
 
     @PostMapping("/delivery-channels")
     @ResponseStatus(HttpStatus.CREATED)
