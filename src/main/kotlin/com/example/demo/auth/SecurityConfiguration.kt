@@ -39,6 +39,7 @@ class SecurityConfiguration(
         .formLogin { it.disable() }
         .logout { it.disable() }
         .csrf { it.disable() }
+        .cors { it.configurationSource(corsConfigurationSource()) }
         // only use http basic in the demo, can be easily changed to other methods using customized filter
         .httpBasic(Customizer.withDefaults())
         .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
@@ -51,10 +52,14 @@ class SecurityConfiguration(
         }
         .build()
 
-    @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("127.0.0.1:5173", "localhost:5173") // or specify a list of allowed origins
+        configuration.allowedOrigins = listOf(
+            "http://127.0.0.1:5173",
+            "http://localhost:5173",
+            "http://localhost:8089",
+            "http://127.0.0.1:8089",
+        ) // or specify a list of allowed origins
         configuration.setAllowedMethods(
             listOf(
                 "GET",
