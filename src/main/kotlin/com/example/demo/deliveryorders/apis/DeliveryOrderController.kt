@@ -1,6 +1,7 @@
 package com.example.demo.deliveryorders.apis
 
 import com.example.demo.auth.models.SecurityUser
+import com.example.demo.core.Query
 import com.example.demo.deliveryorders.models.valueobjects.ChannelComposition
 import com.example.demo.deliveryorders.models.valueobjects.Weight
 import com.example.demo.deliveryorders.services.CreateDeliveryChannel
@@ -65,19 +66,21 @@ class DeliveryOrderController(
     fun queryDeliveryOrders(
         @AuthenticationPrincipal userDetail: SecurityUser,
     ): DeliveryOrderList = try {
-        val result = deliveryOrderQueryHandler.queryDeliveryOrdersByCustomerId(userDetail.getUserId())
+        val query = QueryDeliveryOrdersByCustomerId(customerId = userDetail.getUserId())
+        val result = deliveryOrderQueryHandler.handle(query)
         result
     } catch (e: Exception) {
         throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message)
     }
 
 
-    // there are some securities issues, in production, need to change to a storage service like AWS S3, and enable access control
     @GetMapping("/pdf", produces = [MediaType.APPLICATION_PDF_VALUE])
     fun downloadPdf(
-        @RequestParam path: String,
+        @RequestParam("deliveryOrderId") deliveryOrderId: String,
+        @RequestParam("path") path: String,
     ): ByteArray = try {
-        val result = deliveryOrderQueryHandler.downloadPdf(path)
+        val query = DownloadPdfQuery(deliveryOrderId = deliveryOrderId, path = path)
+        val result = deliveryOrderQueryHandler.handle(query)
         result
     } catch (e: Exception) {
         throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message)
@@ -173,3 +176,13 @@ data class UpdateDeliveryChannelRequest(
     @NotNull val name: String,
     @NotNull val defaultAddress: String,
 )
+
+data class DownloadPdfQuery(
+    @NotNull val deliveryOrderId: String,
+    @NotNull val path: String,
+) : Query
+
+
+data class QueryDeliveryOrdersByCustomerId(
+    @NotNull val customerId: String,
+) : Query

@@ -47,8 +47,6 @@ class SecurityConfiguration(
             it.requestMatchers(
                 "/actuator/**",
                 "/login",
-                "/delivery-orders/pdf",
-                "/delivery-orders/pdf/**",
             ).permitAll()
                 .anyRequest().authenticated()
         }

@@ -1,6 +1,8 @@
 package com.example.demo.deliveryorders.services
 
 import com.example.demo.core.ViewModel
+import com.example.demo.deliveryorders.apis.DownloadPdfQuery
+import com.example.demo.deliveryorders.apis.QueryDeliveryOrdersByCustomerId
 import com.example.demo.deliveryorders.models.DeliveryChannel
 import com.example.demo.deliveryorders.models.DeliveryOrder
 import com.example.demo.deliveryorders.models.valueobjects.Weight
@@ -14,11 +16,12 @@ import java.time.format.DateTimeFormatter
 @Service
 class DeliveryOrderQueryHandler(
     private val mongoTemplate: MongoTemplate,
+    private val pdfService: PdfService,
 ) {
 
-    fun queryDeliveryOrdersByCustomerId(customerId: String): DeliveryOrderList {
-        val query = Query.query(Criteria.where("customerId").`is`(customerId))
-        val lines = mongoTemplate.find(query, DeliveryOrder::class.java).map {
+    fun handle(query: QueryDeliveryOrdersByCustomerId): DeliveryOrderList {
+        val criteria = Query.query(Criteria.where("customerId").`is`(query.customerId))
+        val lines = mongoTemplate.find(criteria, DeliveryOrder::class.java).map {
             DeliveryOrderLine(
                 id = it.id,
                 version = it.version ?: throw Exception("DeliveryOrder version is null: ${it.id}"),
@@ -49,9 +52,16 @@ class DeliveryOrderQueryHandler(
         return DeliveryOrderList(lines)
     }
 
-    fun downloadPdf(path: String): ByteArray {
-        val result = Files.readAllBytes(java.nio.file.Path.of(path))
-        return result
+    fun handle(downloadPdfQuery: DownloadPdfQuery): ByteArray = try {
+        Files.readAllBytes(java.nio.file.Path.of(downloadPdfQuery.path))
+    } catch (e: Exception) {
+        // regenerate the pdf file cause the app is deployed in a container environment,
+        // and every time the container is restarted, the pdf file is gone
+        // will not do it when in production environment, because there will be volumes and persistent storages
+        mongoTemplate.findById(downloadPdfQuery.deliveryOrderId, DeliveryOrder::class.java)?.let {
+            pdfService.generatePdf(it)
+        } ?: throw Exception("DeliveryOrder not found for generating pdf: ${downloadPdfQuery.deliveryOrderId}")
+
     }
 
     fun queryAllDeliveryChannels(): DeliveryChannelListView {
