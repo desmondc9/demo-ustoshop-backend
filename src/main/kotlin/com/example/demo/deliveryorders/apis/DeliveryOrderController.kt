@@ -58,8 +58,8 @@ class DeliveryOrderController(
         result
     } catch (e: Exception) {
         when (e) {
-            is MethodArgumentNotValidException -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
-            else -> throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message)
+            is MethodArgumentNotValidException -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message, e)
+            else -> throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message, e)
         }
     }
 
@@ -71,7 +71,7 @@ class DeliveryOrderController(
         val result = deliveryOrderQueryHandler.handle(query)
         result
     } catch (e: Exception) {
-        throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message)
+        throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message, e)
     }
 
 
@@ -84,7 +84,7 @@ class DeliveryOrderController(
         val result = deliveryOrderQueryHandler.handle(query)
         result
     } catch (e: Exception) {
-        throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message)
+        throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message, e)
     }
 
     @DeleteMapping("/{id}")
@@ -98,8 +98,13 @@ class DeliveryOrderController(
             result
         } catch (e: Exception) {
             when (e) {
-                is MethodArgumentNotValidException -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
-                else -> throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message)
+                is MethodArgumentNotValidException -> throw ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    e.message,
+                    e
+                )
+
+                else -> throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message, e)
             }
         }
 
@@ -119,8 +124,13 @@ class DeliveryOrderController(
             result
         } catch (e: Exception) {
             when (e) {
-                is MethodArgumentNotValidException -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
-                else -> throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message)
+                is MethodArgumentNotValidException -> throw ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    e.message,
+                    e
+                )
+
+                else -> throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message, e)
             }
         }
     }
@@ -133,7 +143,7 @@ class DeliveryOrderController(
         val result = deliveryOrderQueryHandler.queryAllDeliveryChannels()
         result
     } catch (e: Exception) {
-        throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message)
+        throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message, e)
     }
 
 
@@ -152,9 +162,9 @@ class DeliveryOrderController(
         result
     } catch (e: Exception) {
         when (e) {
-            is MethodArgumentNotValidException -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
-            is OptimisticLockingFailureException -> throw ResponseStatusException(HttpStatus.CONFLICT, e.message)
-            else -> throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message)
+            is MethodArgumentNotValidException -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message, e)
+            is OptimisticLockingFailureException -> throw ResponseStatusException(HttpStatus.CONFLICT, e.message, e)
+            else -> throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message, e)
         }
     }
 
@@ -170,8 +180,13 @@ class DeliveryOrderController(
             result
         } catch (e: Exception) {
             when (e) {
-                is MethodArgumentNotValidException -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
-                else -> throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message)
+                is MethodArgumentNotValidException -> throw ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    e.message,
+                    e
+                )
+
+                else -> throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message, e)
             }
         }
 }

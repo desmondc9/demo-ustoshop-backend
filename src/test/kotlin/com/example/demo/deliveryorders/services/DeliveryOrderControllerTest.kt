@@ -1,11 +1,15 @@
 package com.example.demo.deliveryorders.services
 
 import com.example.demo.MongoDBTest
+import com.example.demo.auth.models.Authority
+import com.example.demo.auth.repositories.IUserAuthoritiesRepository
 import com.example.demo.core.nextString
 import com.example.demo.deliveryorders.models.valueobjects.ChannelComposition
 import com.example.demo.deliveryorders.repositories.IDeliveryChannelRepository
 import com.example.demo.deliveryorders.repositories.IDeliveryOrderRepository
 import com.example.demo.deliveryorders.services.DeliveryOrderTestHelper.Companion.generateRawDeliveryData
+import com.example.demo.users.UserTestHelper.Companion.adminPassword
+import com.example.demo.users.UserTestHelper.Companion.adminUsername
 import com.example.demo.users.UserTestHelper.Companion.createUserInDatabase
 import com.example.demo.users.repositories.IUserRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -29,12 +33,15 @@ class DeliveryOrderControllerTest(
     @Autowired val deliveryOrderRepository: IDeliveryOrderRepository,
     @Autowired val deliveryChannelRepository: IDeliveryChannelRepository,
     @Autowired val userReposiotry: IUserRepository,
+    @Autowired val userAuthoritiesRepository: IUserAuthoritiesRepository,
     @Autowired val passwordEncoder: PasswordEncoder,
 ) : MongoDBTest() {
     @BeforeEach
     fun setUp() {
         deliveryOrderRepository.deleteAll()
         deliveryChannelRepository.deleteAll()
+        userReposiotry.deleteAll()
+        userAuthoritiesRepository.deleteAll()
     }
 
     @Nested
@@ -57,13 +64,20 @@ class DeliveryOrderControllerTest(
 
         @Test
         fun `it should create a DeliveryChannel with ADMIN authority`() {
+            createUserInDatabase(
+                username = adminUsername,
+                password = adminPassword,
+                userReposiotry::save,
+                userAuthoritiesRepository::save,
+                listOf(Authority.ADMIN)
+            )
+
             val request = CreateDeliveryChannel(name = "UPS", defaultAddress = Random.nextString(20))
-            val headers = HttpHeaders().also { it.setBasicAuth("admin", "pa\$sword!") }
+            val headers = HttpHeaders().also { it.setBasicAuth(adminUsername, adminPassword) }
             val httpEntity = HttpEntity(request, headers)
 
             val response =
                 client.exchange("/delivery-orders/delivery-channels", HttpMethod.POST, httpEntity, Unit::class.java)
-            // val response = client.postForEntity("/delivery-orders/delivery-channels", request, Unit::class.java)
 
             assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
 
@@ -76,7 +90,12 @@ class DeliveryOrderControllerTest(
 
         @Test
         fun `it should not create a DeliveryChannel without ADMIN authority`() {
-            createUserInDatabase(username = "nonAdmin", password = "password", userReposiotry::save)
+            createUserInDatabase(
+                username = "nonAdmin",
+                password = "password",
+                userReposiotry::save,
+                userAuthoritiesRepository::save
+            )
 
             val request = CreateDeliveryChannel(name = "UPS", defaultAddress = Random.nextString(20))
             val headers = HttpHeaders().also { it.setBasicAuth("nonAdmin", "password") }
