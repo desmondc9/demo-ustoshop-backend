@@ -79,8 +79,8 @@ dependencies {
     implementation("org.apache.pdfbox:pdfbox:3.0.0")
 
     // excel
-    implementation("org.apache.poi:poi:5.2.3")
-    implementation("org.apache.poi:poi-ooxml:5.2.3")
+    // implementation("org.apache.poi:poi:5.2.3")
+    // implementation("org.apache.poi:poi-ooxml:5.2.3")
 }
 
 dependencyManagement {
