@@ -2,9 +2,15 @@
 FROM gradle:8-jdk20 AS build
 WORKDIR /home/gradle/src
 COPY --chown=gradle:gradle ./build.gradle.kts ./
-RUN gradle dependencies --refresh-dependencies --no-daemon
-COPY --chown=gradle:gradle . ./
-RUN gradle bootJar -x test --no-daemon
+RUN gradle dependencies --refresh-dependencies --daemon
+
+COPY --chown=gradle:gradle ./src ./src
+COPY --chown=gradle:gradle ./settings.gradle.kts ./
+
+RUN ls -alh ./
+RUN ls -alh ./src/main/kotlin/com/example/demo/
+
+RUN gradle bootJar -x test --daemon
 
 # Extract layers stage
 FROM eclipse-temurin:20-jre as layers
