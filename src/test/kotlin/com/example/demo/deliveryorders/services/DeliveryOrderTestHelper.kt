@@ -2,6 +2,8 @@ package com.example.demo.deliveryorders.services
 
 import com.example.demo.core.nextString
 import com.example.demo.deliveryorders.models.DeliveryOrder
+import com.example.demo.deliveryorders.models.RawDeliveryData
+import com.example.demo.deliveryorders.models.valueobjects.ChannelComposition
 import com.example.demo.deliveryorders.models.valueobjects.Weight
 import com.example.demo.deliveryorders.models.valueobjects.WeightUnit
 import org.bson.types.ObjectId
@@ -35,6 +37,31 @@ class DeliveryOrderTestHelper {
                 customsRefNumber = Random.nextString(),
                 route = Random.nextString(),
                 customerId = ObjectId().toString(),
+            )
+        }
+
+        fun generateRawDeliveryData(): RawDeliveryData {
+            return RawDeliveryData(
+                id = ObjectId().toString(),
+                billOfLadingNumber = Random.nextString(),
+                version = null,
+                customerId = ObjectId().toString(),
+                channelCompositions = listOf(
+                    ChannelComposition(
+                        channelName = Random.nextString(),
+                        numberOfBoxes = Random.nextInt(0, 9999),
+                        address = Random.nextString(),
+                        weight = Weight(value = Random.nextInt(0, 1000), unit = WeightUnit.KG),
+                    ),
+                    ChannelComposition(
+                        channelName = Random.nextString(),
+                        numberOfBoxes = Random.nextInt(0, 9999),
+                        address = Random.nextString(),
+                        weight = Weight(value = Random.nextInt(0, 1000), unit = WeightUnit.KG),
+                    )
+                ),
+                totalNumberOfBoxes = Random.nextInt(0, 9999),
+                totalWeight = Weight(value = Random.nextInt(0, 1000), unit = WeightUnit.KG),
             )
         }
     }

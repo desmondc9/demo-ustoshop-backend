@@ -2,8 +2,10 @@ package com.example.demo.deliveryorders.services
 
 import com.example.demo.MongoDBTest
 import com.example.demo.core.nextString
+import com.example.demo.deliveryorders.models.valueobjects.ChannelComposition
 import com.example.demo.deliveryorders.repositories.IDeliveryChannelRepository
 import com.example.demo.deliveryorders.repositories.IDeliveryOrderRepository
+import com.example.demo.deliveryorders.services.DeliveryOrderTestHelper.Companion.generateRawDeliveryData
 import com.example.demo.users.UserTestHelper.Companion.createUserInDatabase
 import com.example.demo.users.repositories.IUserRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -33,6 +35,21 @@ class DeliveryOrderControllerTest(
     fun setUp() {
         deliveryOrderRepository.deleteAll()
         deliveryChannelRepository.deleteAll()
+    }
+
+    @Nested
+    inner class `Given delivery orders` {
+        @Test
+        fun `it should let user import RawDeliveryData`() {
+            val rawDeliveryData = generateRawDeliveryData()
+            val request = ImportRawDeliveryData(
+                billOfLadingNumber = rawDeliveryData.billOfLadingNumber,
+                customerId = rawDeliveryData.customerId,
+                totalWeight = rawDeliveryData.totalWeight,
+                totalNumberOfBoxes = rawDeliveryData.totalNumberOfBoxes,
+                channelCompositions = rawDeliveryData.channelCompositions,
+            )
+        }
     }
 
     @Nested
